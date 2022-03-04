@@ -1,0 +1,17 @@
+// copy a document with comments only
+function copyDoc() {
+  var fileId = "1tjVguApiTaGqPxGL5Y6HKLrHWA_BfztTeQEZa6IPSck";
+  let file = DriveApp.getFileById(fileId); //Se obtiene el archivo
+  var fileName = file.getName(); //Se almacena el nombre del archivo
+  var newFile = file.makeCopy(); //Se hace una copia del archivo
+  var documentId = newFile.getId();
+  // Added script
+  var commentList = Drive.Comments.list(fileId);
+  commentList.items.forEach(function(item) { //Copiamos los comentarios
+    var replies = item.replies;
+    delete item.replies;
+    var commentId = Drive.Comments.insert(item, documentId).commentId;
+    replies.forEach(function(reply) {
+      Drive.Replies.insert(reply, documentId, commentId).replyId;
+    });
+  });
