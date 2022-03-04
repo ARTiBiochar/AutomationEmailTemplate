@@ -1,0 +1,79 @@
+// archive content from email template
+function myFunction2() {
+  // Acess main document
+  var doc = DocumentApp.openById('12sKGdZWeFi8mc1CHT60CNJv7i8lzTbFrJNUIZOdF2IU');
+  Logger.log(doc.getName());
+  //1
+  var docBody = doc.getBody();
+  let textToFind = "To archive";
+ // Logger.log(docBody);
+   var searchType = DocumentApp.ElementType.PARAGRAPH;
+   //2
+  var specifiedItem = docBody.findElement(searchType);
+  //var searchText = docBody.findText(textToFind).getElement();
+ //3
+  //Logger.log(specifiedItem.getElement().getNextSibling());
+  var input = specifiedItem.getElement();
+  var output =0;
+  var headingType = 0; 
+  Logger.log(input.getText());
+  try{
+   while(input != null){
+    //Logger.log(input.getText());
+    var validator = false;
+     function getSibling(input){
+       output = input.getNextSibling();
+       return input = output;
+     }
+    headingType = input.getHeading();
+    //identificar si el paraffo seleccionado es un heading y tiene un texto hacer lo sigueinte
+      if(headingType == DocumentApp.ParagraphHeading.HEADING1 && input.getText().includes(textToFind)){
+        var textEmail = [];
+        var inputToRemove = [];
+        var inputForEmail = input;
+        var headingChecker = true;
+        var nextSibling = 0;
+        // buscar en el contenido si hay alguna palabra en especial
+        // se aprueba
+        Logger.log("true it has")
+        // copiar contenido desde ese heading hasta el otro heading
+        while(headingChecker){
+          textEmail.push([inputForEmail.getText()]);
+          inputToRemove.push([inputForEmail]);;
+          inputForEmail = getSibling(inputForEmail);
+          if(inputForEmail.getHeading() == DocumentApp.ParagraphHeading.HEADING1){
+            headingChecker = false;
+            nextSibling = inputForEmail;
+            Logger.log("Stop");
+            Logger.log(nextSibling.getText())
+          }
+        }
+        Logger.log(textEmail);
+          //remove email text from document
+          for(let itemtoremove of inputToRemove){
+            docBody.removeChild(itemtoremove[0]);
+          }
+          //paste on new document the archive email
+          var archiveDoc = DocumentApp.openById('18_d8TCaSCi5E7bRgAKTgXesr7o1bgQ2H0vlTqrmelf0');
+          var bodyArchived = archiveDoc.getBody();
+          for(let parapgrahItem of textEmail){
+            bodyArchived.appendParagraph(parapgrahItem[0]);
+          }
+          validator = true;
+      }
+      if(validator){
+        input = nextSibling;
+      }else{
+        input = getSibling(input);
+      }
+    Logger.log(input.getText());
+  }
+  }catch(e){
+    Logger.log(e)
+  }
+}
+
+
+
+
+
