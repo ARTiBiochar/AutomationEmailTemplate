@@ -1,6 +1,6 @@
 // copy a document with comments only
 function copyDoc() {
-  var fileId = "1tjVguApiTaGqPxGL5Y6HKLrHWA_BfztTeQEZa6IPSck";
+  var fileId = template doc ID;
   let file = DriveApp.getFileById(fileId); //Se obtiene el archivo
   var fileName = file.getName(); //Se almacena el nombre del archivo
   var newFile = file.makeCopy(); //Se hace una copia del archivo
