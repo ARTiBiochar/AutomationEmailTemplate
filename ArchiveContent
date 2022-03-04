@@ -1,7 +1,8 @@
 // archive content from email template
 function myFunction2() {
-  // Acess main document
-  var doc = DocumentApp.openById('12sKGdZWeFi8mc1CHT60CNJv7i8lzTbFrJNUIZOdF2IU');
+  // Acess main document 
+  var docId="email template doc ID"
+  var doc = DocumentApp.openById(docId);
   Logger.log(doc.getName());
   //1
   var docBody = doc.getBody();
