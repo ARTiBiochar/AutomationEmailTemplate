@@ -1,0 +1,16 @@
+function getComments() {
+    // Acess main document
+  var fileId = "1MzeBFmAM1cEm0jln3G5nD_zmdidupxFEsAXYc-xSRto";
+  var data = Drive.Comments.list(fileId);
+  //Logger.log(data.items);
+  
+  for(let commentData of data.items){
+    Logger.log(commentData);
+
+    if(commentData.status == 'resolved'){
+      //Drive.Comments.remove(fileId, commentData.commentId)
+      Logger.log(commentData.commentId + "to delete");
+    } 
+  } 
+  
+}
