@@ -1,6 +1,6 @@
 function getComments() {
     // Acess main document
-  var fileId = "1MzeBFmAM1cEm0jln3G5nD_zmdidupxFEsAXYc-xSRto";
+  var fileId = TEMPLATE ID;
   var data = Drive.Comments.list(fileId);
   //Logger.log(data.items);
   
