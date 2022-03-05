@@ -55,7 +55,7 @@ function myFunction2() {
             docBody.removeChild(itemtoremove[0]);
           }
           //paste on new document the archive email
-          var archiveDoc = DocumentApp.openById('18_d8TCaSCi5E7bRgAKTgXesr7o1bgQ2H0vlTqrmelf0');
+          var archiveDoc = DocumentApp.openById(newDocID);
           var bodyArchived = archiveDoc.getBody();
           for(let parapgrahItem of textEmail){
             bodyArchived.appendParagraph(parapgrahItem[0]);
