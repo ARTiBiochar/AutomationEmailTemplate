@@ -15,3 +15,4 @@ function copyDoc() {
       Drive.Replies.insert(reply, documentId, commentId).replyId;
     });
   });
+}
