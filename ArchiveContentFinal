@@ -4,8 +4,16 @@ function emailTemplate() {
   var newFile = DriveApp.getFileById(docId).makeCopy("ARCHIVED " + DriveApp.getFileById(docId).getName() + ", ARTi " + today); //Se hace una copia del archivo
   removeParagraphs(docId, "To archive"); //Removemos el primero
   removeParagraphs(newFile.getId(), "To review"); //Removemos el segundo
+  removeSolvedComments(docId);
 }
-
+function removeSolvedComments(docId){ //Función para eliminar los comentarios resueltos
+    var commentsList = Drive.Comments.list(docId); //Obtenemos la lista de comentarios
+    commentsList.items.forEach((comment) => { //Recorremos los comentarios
+      if(comment.status === "resolved"){  //Si esta resuelto, lo eliminamos
+        Drive.Comments.remove(docId, comment.commentId);
+      }
+    })
+}
 function removeParagraphs(docId, textToFind){
   var docBody = DocumentApp.openById(docId).getBody(); //Se obtiene el documento (cuerpo)
   docBody.appendParagraph(''); //Se agrega un espacio al final para evitar errores.
