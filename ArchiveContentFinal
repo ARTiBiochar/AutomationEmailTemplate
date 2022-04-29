@@ -1,0 +1,65 @@
+function emailTemplate() {
+  var docId = "1XZBnvHq2RrSfo3IWMxPineBoIhB3mP_ShDyrcgvdqTE"; //Id del documento
+  var today = new Date().toISOString().slice(0, 10); //Se obtiene la fecha de hoy 
+  var newFile = DriveApp.getFileById(docId).makeCopy("ARCHIVED " + DriveApp.getFileById(docId).getName() + ", ARTi " + today); //Se hace una copia del archivo
+  removeParagraphs(docId, "To archive"); //Removemos el primero
+  removeParagraphs(newFile.getId(), "To review"); //Removemos el segundo
+}
+
+function removeParagraphs(docId, textToFind){
+  var docBody = DocumentApp.openById(docId).getBody(); //Se obtiene el documento (cuerpo)
+  docBody.appendParagraph(''); //Se agrega un espacio al final para evitar errores.
+  var specifiedItem = docBody.findElement(DocumentApp.ElementType.PARAGRAPH);
+  var input = specifiedItem.getElement();  //Inputs
+  var validator, headingType, nextSibling, headingChecker, inputTemp; //Variables temporales
+  var inputToRemove = [];
+  try {
+    function getSibling(input){
+      if(input){
+        output = input.getNextSibling();
+        return input = output;
+      }
+    }
+    while(input != null){
+      validator = false;
+      headingType =  input.getHeading();
+      //identificar si el parafo seleccionado es un heading y tiene un texto hacer lo siguiente
+      if(headingType == DocumentApp.ParagraphHeading.HEADING1 && (input.getText().includes(textToFind))){ 
+        inputToRemove = [];
+        inputTemp = input;
+        headingChecker = true;
+        // buscar en el contenido si hay alguna palabra en especial
+        // se aprueba
+        // copiar contenido desde ese heading hasta el otro heading
+        while(headingChecker){
+          if(inputTemp){
+            inputToRemove.push([inputTemp]);
+            inputTemp = getSibling(inputTemp);
+            if(inputTemp && inputTemp.getHeading() == DocumentApp.ParagraphHeading.HEADING1){
+              headingChecker = false;
+              nextSibling = inputTemp;
+              validator= true;
+            }
+          }else{
+            validator = false;
+            break;
+          }
+        }
+        for(let itemToRemove of inputToRemove){ //Se remueven los items
+          if(itemToRemove)
+            docBody.removeChild(itemToRemove[0]);
+        }
+      }
+      try{
+        if(validator)
+          input = nextSibling;
+        else
+          input = getSibling(input);
+      }catch(e){
+        Logger.log("");
+      }
+    } 
+  }catch(e) {
+    Logger.log("");
+  }
+}
